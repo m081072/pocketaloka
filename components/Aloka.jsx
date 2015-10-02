@@ -1,9 +1,7 @@
 'use strict';
 
 var React = require('react');
-var View = require('react-flexbox');
 var $ = require('jquery');
-var $f = require('vimeo-froogaloop');
 var Video = require('./Video');
 
 module.exports = React.createClass({
@@ -24,14 +22,20 @@ module.exports = React.createClass({
             }.bind(this)
         });
     },
-    render: function () {
-        var player = <div/>
-        if(this.state.videos.length > 0) {
+    playVideo: function() {
             var index = Math.floor(Math.random() * this.state.videos.length);
             var video = this.state.videos[index];
-            player = <Video uri={video.uri} duration={video.duration}/>
-        }
+            this.setState({selectedVideo: video});
+    },
+    render: function () {
+        var playButton = this.state.videos.length > 0 ? <button type="button" onClick={this.playVideo}>Play video</button> : <button type="button">Waiting</button>
+        var videoTag = this.state.selectedVideo  ? <Video uri={this.state.selectedVideo.uri} duration={this.state.selectedVideo.duration} stopAfterSeconds="15"/> : <Video/>
 
-        return player
+        return <div>
+            {videoTag}
+            <br/>
+            {playButton}
+            </div>
+
     }
 });
